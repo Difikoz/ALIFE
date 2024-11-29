@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835127ca0da423e4897529d40507bf0a, type: 3}
+  m_Name: Find Bed (Only Test)
+  m_EditorClassIdentifier: 
+  DisplayName: Find Bed
+  Cost: 1
+  ConditionsToStart:
+  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
+    Value: 0
+  Effects:
+  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
+    Value: 1
+  ConditionsToAbort: []
+  CompleteOnReachedDestination: 0
+  ConditionsToComplete:
+  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
+    Value: 1
