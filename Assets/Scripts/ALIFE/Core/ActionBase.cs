@@ -82,7 +82,7 @@ namespace WinterUniverse
 
         public virtual bool CanComplete()
         {
-            if (_config.CompleteOnReachedDestination && _pawn.IsReachedDestination)
+            if (_config.CompleteOnReachedDestination && _pawn.ReachedDestination)
             {
                 return true;
             }

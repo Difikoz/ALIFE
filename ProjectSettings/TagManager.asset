@@ -11,9 +11,9 @@ TagManager:
   - Pawn
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Interactable
+  - Damageable
+  - Damage
   - 
   - 
   - 

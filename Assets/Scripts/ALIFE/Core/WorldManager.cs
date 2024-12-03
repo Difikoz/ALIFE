@@ -14,6 +14,7 @@ namespace WinterUniverse
         protected override void Awake()
         {
             base.Awake();
+            _stateHolder = new();
             foreach (StateCreator creator in StatesToAdd)
             {
                 _stateHolder.SetState(creator.Key.ID, creator.Value);

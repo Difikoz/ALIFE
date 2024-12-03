@@ -1,106 +1,157 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace WinterUniverse
 {
-    [RequireComponent(typeof(Animator))]
-    [RequireComponent(typeof(NavMeshAgent))]
     public abstract class PawnBase : MonoBehaviour
     {
-        private readonly float _nearestPointSearchRange = 5f;
-        private Animator _animator;
-        private NavMeshAgent _agent;
-        private StateHolder _stateHolder;
-        private ActionBase _currentAction;
-        private GoalHolder _currentGoal;
-        private List<ActionBase> _actions = new();
-        private Dictionary<GoalHolder, int> _goals = new();
-        private Queue<ActionBase> _actionQueue;
-        private bool _isReachedDestination;
+        public float ForwardVelocity;
+        public float RightVelocity;
+        public float TurnVelocity;
+        public bool IsMoving;
+        public bool IsRunning;
 
-        public List<StateCreator> StatesToAdd = new();
-        public List<GoalCreator> GoalsToAdd = new();
+        protected readonly float _nearestPointSearchRange = 5f;
+        protected Animator _animator;
+        protected NavMeshAgent _agent;
+        protected StateHolder _stateHolder;
+        protected Vector3 _moveVelocity;
+        protected bool _reachedDestination;
+        protected bool _isDead;
+        protected PawnBase _target;
+        protected Vector3 _lastTargetPosition;
+        protected WeaponSlot _rightHandWeaponSlot;
+        protected WeaponSlot _leftHandWeaponSlot;
 
+        [SerializeField] protected Transform _head;
+        [SerializeField] protected Transform _body;
+        [SerializeField] protected float _targetLostDistance = 100f;
+        [SerializeField] protected float _rotateSpeed = 0.5f;
+        [SerializeField] protected float _turnAnimationAngle = 45f;
+
+        public Transform Head => _head;
+        public Transform Body => _body;
         public StateHolder StateHolder => _stateHolder;
-        public ActionBase CurrentAction => _currentAction;
-        public GoalHolder CurrentGoal => _currentGoal;
-        public List<ActionBase> Actions => _actions;
-        public Dictionary<GoalHolder, int> Goals => _goals;
-        public bool IsReachedDestination => _isReachedDestination;
+        public bool ReachedDestination => _reachedDestination;
+        public bool IsDead => _isDead;
+        public PawnBase Target => _target;
+        public WeaponSlot RightHandWeaponSlot => _rightHandWeaponSlot;
+        public WeaponSlot LeftHandWeaponSlot => _leftHandWeaponSlot;
 
         protected virtual void Awake()
         {
+            GetComponents();
+            InitializeComponents();
+        }
+
+        protected virtual void GetComponents()
+        {
             _animator = GetComponent<Animator>();
-            _agent = GetComponent<NavMeshAgent>();
-            foreach (StateCreator creator in StatesToAdd)
+            _agent = GetComponentInChildren<NavMeshAgent>();
+            WeaponSlot[] weaponSlots = GetComponentsInChildren<WeaponSlot>();
+            foreach (WeaponSlot ws in weaponSlots)
             {
-                _stateHolder.SetState(creator.Key.ID, creator.Value);
+                if (ws.HandSlotType == HandSlotType.Right)
+                {
+                    _rightHandWeaponSlot = ws;
+                }
+                else if (ws.HandSlotType == HandSlotType.Left)
+                {
+                    _leftHandWeaponSlot = ws;
+                }
             }
-            ActionBase[] actions = GetComponentsInChildren<ActionBase>();
-            foreach (ActionBase action in actions)
-            {
-                _actions.Add(action);
-            }
-            foreach (GoalCreator creator in GoalsToAdd)
-            {
-                _goals.Add(new(creator.Config), creator.Priority);
-            }
+            _stateHolder = new();
+        }
+
+        protected virtual void InitializeComponents()
+        {
+            //_agent.updatePosition = false;
+            _agent.updateRotation = false;
+        }
+
+        protected virtual void OnEnable()
+        {
+
+        }
+
+        protected virtual void OnDisable()
+        {
+
+        }
+
+        protected virtual void FixedUpdate()
+        {
+
         }
 
         protected virtual void Update()
         {
-            if (_currentAction != null)
+            if (!_reachedDestination && _agent.remainingDistance < 1f)
             {
-                if (_currentAction.CanAbort())
+                StopMovement();
+            }
+            IsMoving = _agent.desiredVelocity != Vector3.zero;
+            if (IsMoving)
+            {
+                if (IsRunning)
                 {
-                    _currentAction.OnAbort();
-                    _currentAction = null;
-                }
-                else if (_currentAction.CanComplete())
-                {
-                    _currentAction.OnComplete();
-                    _currentAction = null;
+                    _moveVelocity = Vector3.MoveTowards(_moveVelocity, _agent.desiredVelocity.normalized * 2f, 4f * Time.deltaTime);
                 }
                 else
                 {
-                    _currentAction.OnUpdate(Time.deltaTime);
+                    _moveVelocity = Vector3.MoveTowards(_moveVelocity, _agent.desiredVelocity.normalized, 2f * Time.deltaTime);
                 }
-                return;
             }
-            if (_actionQueue == null)
+            else
             {
-                var sortedGoals = from entry in _goals orderby entry.Value descending select entry;
-                foreach (KeyValuePair<GoalHolder, int> sg in sortedGoals)
-                {
-                    //Debug.LogWarning($"Try Get Plan for [{sg.Key.GoalName}]");
-                    _actionQueue = TaskManager.GetPlan(_actions, _stateHolder.States, _goals.ElementAt(0).Key.Conditions);
-                    if (_actionQueue != null)
-                    {
-                        _currentGoal = sg.Key;
-                        return;
-                    }
-                }
+                _moveVelocity = Vector3.MoveTowards(_moveVelocity, Vector3.zero, 4f * Time.deltaTime);
             }
-            if (_actionQueue != null && _actionQueue.Count > 0)
+            ForwardVelocity = Vector3.Dot(_moveVelocity, transform.forward);
+            RightVelocity = Vector3.Dot(_moveVelocity, transform.right);
+            if (_target != null)
             {
-                _currentAction = _actionQueue.Dequeue();
-                if (_currentAction.CanStart())
-                {
-                    _currentAction.OnStart();
-                }
-                else
-                {
-                    _actionQueue = null;
-                }
-                return;
+                TurnVelocity = Vector3.SignedAngle(transform.forward, (_target.transform.position - transform.position).normalized, Vector3.up);
             }
-            if (!_currentGoal.Config.Repeatable)
+            else
             {
-                _goals.Remove(_currentGoal);
+                TurnVelocity = Vector3.SignedAngle(transform.forward, _agent.desiredVelocity.normalized, Vector3.up);
             }
-            _actionQueue = null;
+            if (IsMoving)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_agent.desiredVelocity.normalized), _rotateSpeed * Time.deltaTime);
+            }
+            _animator.SetFloat("ForwardVelocity", ForwardVelocity);
+            _animator.SetFloat("RightVelocity", RightVelocity);
+            _animator.SetFloat("TurnVelocity", TurnVelocity / _turnAnimationAngle);
+            _animator.SetBool("IsMoving", IsMoving);
+            _agent.transform.localPosition = Vector3.zero;
+        }
+
+        protected virtual void LateUpdate()
+        {
+
+        }
+
+        public virtual void SetTarget(PawnBase target, bool resetMovement = true)
+        {
+            if (target != null)
+            {
+                _target = target;
+            }
+            else
+            {
+                _target = null;
+            }
+            if (resetMovement)
+            {
+                StopMovement();
+            }
+        }
+
+        public void StopMovement()
+        {
+            _reachedDestination = true;
+            _agent.ResetPath();
         }
 
         public void SetDestination(Vector3 position)
@@ -108,17 +159,21 @@ namespace WinterUniverse
             if (NavMesh.SamplePosition(position, out NavMeshHit hitResult, _nearestPointSearchRange, NavMesh.AllAreas))
             {
                 _agent.SetDestination(hitResult.position);
-                _isReachedDestination = false;
+                _reachedDestination = false;
             }
         }
 
-        public void SetDestinationInRange(float radius)
+        public void SetDestinationInRange(Vector3 position, float radius)
         {
-            Vector3 position = transform.position;
             radius /= 2f;
             position += Vector3.right * Random.Range(-radius, radius);
             position += Vector3.forward * Random.Range(-radius, radius);
             SetDestination(position);
+        }
+
+        public void SetDestinationInRange(float radius)
+        {
+            SetDestinationInRange(transform.position, radius);
         }
     }
 }
