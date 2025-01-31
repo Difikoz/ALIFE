@@ -1034,9 +1034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dontDestroyOnLoad: 0
-  StatesToAdd:
-  - Key: {fileID: 11400000, guid: e59a22084ccb98b43a71574702a74ff9, type: 2}
-    Value: 0
+  StateCreatorHolder: {fileID: 11400000, guid: 33cd20266e3ccea4bacfa2e8c64bdfdd, type: 2}
 --- !u!4 &187374694
 Transform:
   m_ObjectHideFlags: 0
@@ -4743,26 +4741,11 @@ MonoBehaviour:
   IsRunning: 0
   _head: {fileID: 1120423475}
   _body: {fileID: 1457485677}
+  _targetLostDistance: 100
   _rotateSpeed: 0.5
   _turnAnimationAngle: 45
-  StatesToAdd:
-  - Key: {fileID: 11400000, guid: 86389b7b23a327744b0cbc56b0113b1f, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 0cbc9fead0650674289710e37e15621d, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: af178a9b3b8118f4a9f424aa699d45af, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 7cf52582d624ea947be30e68b4706398, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: d5b62978d58b11e4490aec86ba879596, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 32bb59ec4cf433e45b3656565781e4a9, type: 2}
-    Value: 0
-  GoalsToAdd:
-  - Config: {fileID: 11400000, guid: 6d7dfaea0a1a1ba46a26257a9f97a311, type: 2}
-    Priority: 10
+  StateCreatorHolder: {fileID: 11400000, guid: a6bfb57032e6a8742a9b24f410b61f94, type: 2}
+  GoalCreatorHolder: {fileID: 11400000, guid: 4b39efe60e1d3e04eaf4f32c65ea57e6, type: 2}
 --- !u!4 &1021522541
 Transform:
   m_ObjectHideFlags: 0
@@ -5234,26 +5217,11 @@ MonoBehaviour:
   IsRunning: 0
   _head: {fileID: 539733556}
   _body: {fileID: 675473077}
+  _targetLostDistance: 100
   _rotateSpeed: 0.5
   _turnAnimationAngle: 45
-  StatesToAdd:
-  - Key: {fileID: 11400000, guid: 86389b7b23a327744b0cbc56b0113b1f, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 0cbc9fead0650674289710e37e15621d, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: af178a9b3b8118f4a9f424aa699d45af, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 7cf52582d624ea947be30e68b4706398, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: d5b62978d58b11e4490aec86ba879596, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 32bb59ec4cf433e45b3656565781e4a9, type: 2}
-    Value: 0
-  GoalsToAdd:
-  - Config: {fileID: 11400000, guid: 6d7dfaea0a1a1ba46a26257a9f97a311, type: 2}
-    Priority: 10
+  StateCreatorHolder: {fileID: 11400000, guid: a6bfb57032e6a8742a9b24f410b61f94, type: 2}
+  GoalCreatorHolder: {fileID: 11400000, guid: 4b39efe60e1d3e04eaf4f32c65ea57e6, type: 2}
 --- !u!4 &1100290259
 Transform:
   m_ObjectHideFlags: 0
@@ -6778,26 +6746,11 @@ MonoBehaviour:
   IsRunning: 0
   _head: {fileID: 1447634554}
   _body: {fileID: 587505515}
+  _targetLostDistance: 100
   _rotateSpeed: 0.5
   _turnAnimationAngle: 45
-  StatesToAdd:
-  - Key: {fileID: 11400000, guid: 86389b7b23a327744b0cbc56b0113b1f, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 0cbc9fead0650674289710e37e15621d, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: af178a9b3b8118f4a9f424aa699d45af, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 7cf52582d624ea947be30e68b4706398, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: d5b62978d58b11e4490aec86ba879596, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 32bb59ec4cf433e45b3656565781e4a9, type: 2}
-    Value: 0
-  GoalsToAdd:
-  - Config: {fileID: 11400000, guid: 6d7dfaea0a1a1ba46a26257a9f97a311, type: 2}
-    Priority: 10
+  StateCreatorHolder: {fileID: 11400000, guid: a6bfb57032e6a8742a9b24f410b61f94, type: 2}
+  GoalCreatorHolder: {fileID: 11400000, guid: 4b39efe60e1d3e04eaf4f32c65ea57e6, type: 2}
 --- !u!4 &1428073446
 Transform:
   m_ObjectHideFlags: 0
@@ -11437,26 +11390,11 @@ MonoBehaviour:
   IsRunning: 0
   _head: {fileID: 715054098191487517}
   _body: {fileID: 7638607588408139871}
+  _targetLostDistance: 100
   _rotateSpeed: 0.5
   _turnAnimationAngle: 45
-  StatesToAdd:
-  - Key: {fileID: 11400000, guid: 86389b7b23a327744b0cbc56b0113b1f, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 0cbc9fead0650674289710e37e15621d, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 6ac3c0f7bc529394d9482eca64709854, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: af178a9b3b8118f4a9f424aa699d45af, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 7cf52582d624ea947be30e68b4706398, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: d5b62978d58b11e4490aec86ba879596, type: 2}
-    Value: 0
-  - Key: {fileID: 11400000, guid: 32bb59ec4cf433e45b3656565781e4a9, type: 2}
-    Value: 0
-  GoalsToAdd:
-  - Config: {fileID: 11400000, guid: 6d7dfaea0a1a1ba46a26257a9f97a311, type: 2}
-    Priority: 10
+  StateCreatorHolder: {fileID: 11400000, guid: a6bfb57032e6a8742a9b24f410b61f94, type: 2}
+  GoalCreatorHolder: {fileID: 11400000, guid: 4b39efe60e1d3e04eaf4f32c65ea57e6, type: 2}
 --- !u!136 &5661650910877326753
 CapsuleCollider:
   m_ObjectHideFlags: 0

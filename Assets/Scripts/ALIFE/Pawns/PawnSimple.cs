@@ -13,10 +13,10 @@ namespace WinterUniverse
         protected List<ActionBase> _actions = new();
         protected Dictionary<GoalHolder, int> _goals = new();
         protected Queue<ActionBase> _actionQueue;
-        [Header("Add this to World Config")]
-        public List<StateCreator> StatesToAdd = new();
-        [Header("Add this to AI Config")]
-        public List<GoalCreator> GoalsToAdd = new();
+
+        [SerializeField] protected PawnSimpleConfig _pawnSimpleConfig;
+        [SerializeField] protected StateHolderConfig _stateCreatorHolder;
+        [SerializeField] protected GoalHolderConfig _goalCreatorHolder;
 
         public ActionBase CurrentAction => _currentAction;
         public GoalHolder CurrentGoal => _currentGoal;
@@ -25,6 +25,7 @@ namespace WinterUniverse
 
         protected override void GetComponents()
         {
+            _pawnBaseConfig = _pawnSimpleConfig;
             base.GetComponents();
             _hear = GetComponentInChildren<SensorHear>();
             _vision = GetComponentInChildren<SensorVision>();
@@ -33,7 +34,7 @@ namespace WinterUniverse
         protected override void InitializeComponents()
         {
             base.InitializeComponents();
-            foreach (StateCreator creator in StatesToAdd)
+            foreach (StateCreator creator in _stateCreatorHolder.StatesToAdd)
             {
                 _stateHolder.SetState(creator.Key.ID, creator.Value);
             }
@@ -42,7 +43,7 @@ namespace WinterUniverse
             {
                 _actions.Add(action);
             }
-            foreach (GoalCreator creator in GoalsToAdd)
+            foreach (GoalCreator creator in _goalCreatorHolder.GoalsToAdd)
             {
                 _goals.Add(new(creator.Config), creator.Priority);
             }
@@ -55,57 +56,20 @@ namespace WinterUniverse
             base.Update();
             _hear.Detect();
             _vision.Detect();
-            //if (_target == null)
-            //{
-            //    if (_hear.DetectedTargets.Count > 0)
-            //    {
-            //        SetTarget(_hear.DetectedTargets.OrderBy(target => Vector3.Distance(target.transform.position, transform.position)).FirstOrDefault());
-            //    }
-            //    else if (_vision.DetectedTargets.Count > 0)
-            //    {
-            //        SetTarget(_vision.DetectedTargets.OrderBy(target => Vector3.Distance(target.transform.position, transform.position)).FirstOrDefault());
-            //    }
-            //}
             if (_hear.DetectedTargets.Count > 0)
             {
-                SetTarget(_hear.DetectedTargets.OrderBy(target => Vector3.Distance(target.transform.position, transform.position)).FirstOrDefault(), _target == null);
+                //SetTarget(_hear.DetectedTargets.OrderBy(target => Vector3.Distance(target.transform.position, transform.position)).FirstOrDefault(), _target == null);
             }
             else if (_vision.DetectedTargets.Count > 0)
             {
-                SetTarget(_vision.DetectedTargets.OrderBy(target => Vector3.Distance(target.transform.position, transform.position)).FirstOrDefault(), _target == null);
+                //SetTarget(_vision.DetectedTargets.OrderBy(target => Vector3.Distance(target.transform.position, transform.position)).FirstOrDefault(), _target == null);
             }
         }
 
         protected override void LateUpdate()
         {
             base.Update();
-            //ProccessGOAP();
-            if (_target != null)
-            {
-                IsRunning = true;
-                if (_hear.TargetIsDetected(_target))
-                {
-                    _lastTargetPosition = _target.transform.position;
-                    SetDestination(_lastTargetPosition);
-                }
-                else if (_vision.TargetIsDetected(_target))
-                {
-                    _lastTargetPosition = _target.transform.position;
-                    SetDestination(_lastTargetPosition);
-                }
-                else if (_reachedDestination)
-                {
-                    SetTarget(null);
-                }
-            }
-            else
-            {
-                IsRunning = false;
-                if (_reachedDestination)
-                {
-                    SetDestinationInRange(50f);
-                }
-            }
+            ProccessGOAP();
         }
 
         protected void ProccessGOAP()

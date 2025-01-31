@@ -11,6 +11,7 @@ namespace WinterUniverse
         public bool IsMoving;
         public bool IsRunning;
 
+        protected PawnBaseConfig _pawnBaseConfig;
         protected readonly float _nearestPointSearchRange = 5f;
         protected Animator _animator;
         protected NavMeshAgent _agent;
