@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc837ff97f80ab540b899757101a70c9, type: 3}
+  m_Name: Visual
+  m_EditorClassIdentifier: 
+  _model: {fileID: 0}
+  _controller: {fileID: 22100000, guid: 5a1faf2d6d259a4439a40aa53fb43ba2, type: 2}
+  _turnAnimationAngle: 45

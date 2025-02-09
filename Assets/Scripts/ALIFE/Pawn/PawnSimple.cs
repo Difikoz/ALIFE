@@ -14,7 +14,7 @@ namespace WinterUniverse
         protected Dictionary<GoalHolder, int> _goals = new();
         protected Queue<ActionBase> _actionQueue;
 
-        [SerializeField] protected PawnSimpleConfig _pawnSimpleConfig;
+        //[SerializeField] protected PawnSimpleConfig _pawnSimpleConfig;
         [SerializeField] protected StateHolderConfig _stateCreatorHolder;
         [SerializeField] protected GoalHolderConfig _goalCreatorHolder;
 
@@ -25,7 +25,7 @@ namespace WinterUniverse
 
         protected override void GetComponents()
         {
-            _pawnBaseConfig = _pawnSimpleConfig;
+            //_pawnVisualConfig = _pawnSimpleConfig;
             base.GetComponents();
             _hear = GetComponentInChildren<SensorHear>();
             _vision = GetComponentInChildren<SensorVision>();

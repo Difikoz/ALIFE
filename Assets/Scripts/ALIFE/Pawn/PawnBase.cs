@@ -11,7 +11,6 @@ namespace WinterUniverse
         public bool IsMoving;
         public bool IsRunning;
 
-        protected PawnBaseConfig _pawnBaseConfig;
         protected readonly float _nearestPointSearchRange = 5f;
         protected Animator _animator;
         protected NavMeshAgent _agent;
@@ -26,9 +25,9 @@ namespace WinterUniverse
 
         [SerializeField] protected Transform _head;
         [SerializeField] protected Transform _body;
-        [SerializeField] protected float _targetLostDistance = 100f;
-        [SerializeField] protected float _rotateSpeed = 0.5f;
-        [SerializeField] protected float _turnAnimationAngle = 45f;
+        [SerializeField] protected PawnVisualConfig _pawnVisualConfig;
+        [SerializeField] protected PawnMovementConfig _pawnMovementConfig;
+        [SerializeField] protected PawnTargetingConfig _pawnTargetingConfig;
 
         public Transform Head => _head;
         public Transform Body => _body;
@@ -66,8 +65,9 @@ namespace WinterUniverse
 
         protected virtual void InitializeComponents()
         {
-            //_agent.updatePosition = false;
             _agent.updateRotation = false;
+            _rightHandWeaponSlot.Initialize();
+            _leftHandWeaponSlot.Initialize();
         }
 
         protected virtual void OnEnable()
@@ -96,16 +96,16 @@ namespace WinterUniverse
             {
                 if (IsRunning)
                 {
-                    _moveVelocity = Vector3.MoveTowards(_moveVelocity, _agent.desiredVelocity.normalized * 2f, 4f * Time.deltaTime);
+                    _moveVelocity = Vector3.MoveTowards(_moveVelocity, _agent.desiredVelocity.normalized * 2f, _pawnMovementConfig.Acceleration * Time.deltaTime);
                 }
                 else
                 {
-                    _moveVelocity = Vector3.MoveTowards(_moveVelocity, _agent.desiredVelocity.normalized, 2f * Time.deltaTime);
+                    _moveVelocity = Vector3.MoveTowards(_moveVelocity, _agent.desiredVelocity.normalized, _pawnMovementConfig.Acceleration * Time.deltaTime);
                 }
             }
             else
             {
-                _moveVelocity = Vector3.MoveTowards(_moveVelocity, Vector3.zero, 4f * Time.deltaTime);
+                _moveVelocity = Vector3.MoveTowards(_moveVelocity, Vector3.zero, _pawnMovementConfig.Deceleration * Time.deltaTime);
             }
             ForwardVelocity = Vector3.Dot(_moveVelocity, transform.forward);
             RightVelocity = Vector3.Dot(_moveVelocity, transform.right);
@@ -119,11 +119,11 @@ namespace WinterUniverse
             }
             if (IsMoving)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_agent.desiredVelocity.normalized), _rotateSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_agent.desiredVelocity.normalized), _pawnMovementConfig.RotateSpeed * Time.deltaTime);
             }
             _animator.SetFloat("ForwardVelocity", ForwardVelocity);
             _animator.SetFloat("RightVelocity", RightVelocity);
-            _animator.SetFloat("TurnVelocity", TurnVelocity / _turnAnimationAngle);
+            _animator.SetFloat("TurnVelocity", TurnVelocity / _pawnVisualConfig.TurnAnimationAngle);
             _animator.SetBool("IsMoving", IsMoving);
             _agent.transform.localPosition = Vector3.zero;
         }
